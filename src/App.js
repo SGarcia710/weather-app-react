@@ -21,9 +21,18 @@ const App = () => {
 
   const getData = async () => {
     const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${query.city},${query.countryCode}&appid=801685f9e6f8de87e464e193e808b4ed
-      `
+      `https://community-open-weather-map.p.rapidapi.com/weather?id=2172797&lang=sp&units=metric&mode=xml%2C%20html&q=${query.city}%2C${query.countryCode}`,
+      {
+        method: 'GET',
+        headers: {
+          'x-rapidapi-host': 'community-open-weather-map.p.rapidapi.com',
+          'x-rapidapi-key': '50b348b789mshc5e5fc6ede0488cp1b6fe1jsne7b277a7800b'
+        }
+      }
     );
+    console.log(response);
+    // Free OpenWeatherAPI account Sgarcia710 - 60 calls per minute
+    //`https://api.openweathermap.org/data/2.5/weather?q=${query.city},${query.countryCode}&appid=801685f9e6f8de87e464e193e808b4ed`
     const json = await response.json();
     console.log(json);
     if (json.cod === 200) {
