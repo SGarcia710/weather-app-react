@@ -3,6 +3,7 @@ import './App.css';
 import WeatherInfo from './components/WeatherInfo';
 
 const App = () => {
+  // estado para la información del clima
   const [weatherInfo, setWeatherInfo] = useState({
     code: '',
     temp: '',
@@ -12,7 +13,7 @@ const App = () => {
     weatherDesc: '',
     windSpeed: ''
   });
-
+  // Estado para la información de búsqueda
   const [query, setQuery] = useState({ city: 'cali', countryCode: 'co' });
 
   useEffect(() => {
@@ -20,6 +21,7 @@ const App = () => {
   }, [query]);
 
   const getData = async () => {
+    // Hacemos un request a la API con los datos seleccionados
     const response = await fetch(
       `https://community-open-weather-map.p.rapidapi.com/weather?id=2172797&lang=en&units=metric&mode=xml%2C%20html&q=${query.city}%2C${query.countryCode}`,
       {
@@ -29,12 +31,12 @@ const App = () => {
           'x-rapidapi-key': '50b348b789mshc5e5fc6ede0488cp1b6fe1jsne7b277a7800b'
         }
       }
-    ).catch();
-    // Free OpenWeatherAPI account Sgarcia710 - 60 calls per minute
-    //`https://api.openweathermap.org/data/2.5/weather?q=${query.city},${query.countryCode}&appid=801685f9e6f8de87e464e193e808b4ed`
+    );
+    // Convertimos la promesa recibida a un objeto JSON
     const json = await response.json();
+    // Verficamos si la solicitud fue hecha con una ciudad y/o pais validos
     if (json.cod === 200) {
-      // City found
+      // de ser correcta la solicitud, procedemos a extraer los datos de interés de la respuesta del servidor
       const {
         cod,
         main: { temp, humidity },
@@ -43,6 +45,7 @@ const App = () => {
         weather,
         wind: { speed }
       } = json;
+      // construimos el objeto a guardar en nuestro estado
       const object = {
         code: cod,
         temp: temp,
@@ -52,13 +55,16 @@ const App = () => {
         weatherDesc: weather[0].description,
         windSpeed: speed
       };
+      // Establecemos nuestro nuevo estado
       setWeatherInfo(object);
     } else {
-      // City not found
+      // De no ser valida la busqueda, solamente guardamos el código
       const { cod } = json;
+      // Creamos el objeto a guardar en nuestro estado
       const object = {
         code: cod
       };
+      // Establecemos nuestro nuevo estado
       setWeatherInfo(object);
     }
   };
@@ -78,6 +84,7 @@ const App = () => {
     <div className='container p-4'>
       <div className='row'>
         <div className='col-md-4 mx-auto text-center'>
+          {/* Uso mi Componente */}
           <WeatherInfo
             code={weatherInfo.code}
             temp={weatherInfo.temp}
@@ -89,11 +96,10 @@ const App = () => {
           />
           <div className='card'>
             <div className='card-body'>
-              <form action='' id='w-form' onSubmit={getSearchTerms}>
+              <form onSubmit={getSearchTerms}>
                 <div className='form-group'>
                   <input
                     type='text'
-                    id='city'
                     className='form-control'
                     placeholder='City'
                     name='city'
@@ -103,21 +109,16 @@ const App = () => {
                 </div>
                 <div className='form-group'>
                   <input
+                    className='form-control'
                     type='text'
                     placeholder='Country Code'
                     name='countryCode'
-                    required
-                    id='countryCode'
                     maxLength='3'
-                    className='form-control'
+                    required
                   />
                 </div>
                 <div className='form-group'>
-                  <button
-                    type='submit'
-                    className='btn btn-primary btn-block'
-                    id='w-change-btn'
-                  >
+                  <button type='submit' className='btn btn-primary btn-block'>
                     Search
                   </button>
                 </div>
