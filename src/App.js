@@ -85,15 +85,7 @@ const App = () => {
       <div className='row'>
         <div className='col-md-4 mx-auto text-center'>
           {/* Uso mi Componente */}
-          <WeatherInfo
-            code={weatherInfo.code}
-            temp={weatherInfo.temp}
-            humidity={weatherInfo.humidity}
-            name={weatherInfo.name}
-            country={weatherInfo.country}
-            weatherDesc={weatherInfo.weatherDesc}
-            windSpeed={weatherInfo.windSpeed}
-          />
+          <WeatherInfo {...weatherInfo} />
           <div className='card'>
             <div className='card-body'>
               <form onSubmit={getSearchTerms}>
